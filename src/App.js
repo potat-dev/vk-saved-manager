@@ -1,7 +1,13 @@
+import React from "react";
+import Page from "./components/Page";
+import TestText from "./components/TestText";
+
 function App() {
   return (
-    <div className="App">
-      Hello World
+    <div>
+      <Page innerSx={{ px: 3, py: 1 }}>
+        <TestText />
+      </Page>
     </div>
   );
 }
