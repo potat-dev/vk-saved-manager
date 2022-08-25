@@ -43,7 +43,7 @@ export default function Page(props) {
         }}
       >
         <Toolbar />
-        <Box sx={{ ...props.innerSx, overflowY: "auto" }}>
+        <Box sx={{ ...props.innerSx, overflowY: "auto", overflowX: "hidden" }}>
           <Container disableGutters={true} maxWidth="md">
             {props.children}
           </Container>
