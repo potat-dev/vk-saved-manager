@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import Page from "./components/Page";
-import VkAuth from "./components/VkAuth";
 import { Button } from "@mui/material";
 import ImageMasonry from "./components/ImageMasonry";
 
+import useAuth from "./components/useAuth";
+
 function App() {
   const app_id = "51400649";
-  const handleVkResponse = (data) => {
-    console.warn(data);
-  };
+  const auth = useAuth({ apiId: app_id, settings: 4 });
+
   const [images, setImages] = useState(null);
   const add_offset = () => {
     return images ? { offset: images.length } : {};
   };
 
   const handleClick = () => {
+    if (!auth.signedIn) return;
     window.VK.Api.call(
       "photos.get",
       {
-        owner_id: window.VK._session.mid,
+        owner_id: auth.user.id,
         v: "5.131",
         rev: 1,
         extended: 1,
@@ -59,7 +60,17 @@ function App() {
   return (
     <div>
       <Page innerSx={{ px: 3, py: 1 }}>
-        <VkAuth apiId={app_id} callback={handleVkResponse} settings={4} />
+        <Button variant="contained" color="primary" onClick={auth.signIn}>
+          Login
+        </Button>
+        <Button variant="contained" color="primary" onClick={auth.signOut}>
+          Logout
+        </Button>
+        {auth.signedIn && auth.user && (
+          <div>
+            signedIn as {auth.user.name} {auth.user.surname}
+          </div>
+        )}
         {images && <ImageMasonry itemData={images} />}
         <Button variant="contained" color="primary" onClick={handleClick}>
           Test API
