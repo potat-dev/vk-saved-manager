@@ -37,7 +37,7 @@ export default function useAuth({ apiId, settings }) {
       if (response.session) {
         setSignedIn(true);
         if (!user) {
-          getUserInfo(response.session.user.id, (user) => {
+          getUserInfo(response.session.mid, (user) => {
             localStorage.setItem("user", JSON.stringify(user));
           });
         }

@@ -22,11 +22,7 @@ export default function Navbar(props) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-        >
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {props.title}
         </Typography>
         <Box sx={{ display: { xs: "none", sm: "block" } }}>

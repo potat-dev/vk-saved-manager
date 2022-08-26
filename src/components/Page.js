@@ -22,7 +22,7 @@ export default function Page(props) {
       <Navbar
         onMenuClick={toggleDrawer}
         navItems={navItems}
-        title="App Title"
+        title="Saved Manager"
       />
 
       <Sidebar

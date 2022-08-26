@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Page from "./components/Page";
-import { Button } from "@mui/material";
+import { Button, Box, Avatar } from "@mui/material";
 import ImageMasonry from "./components/ImageMasonry";
 
 import useAuth from "./components/useAuth";
@@ -59,21 +59,40 @@ function App() {
 
   return (
     <div>
-      <Page innerSx={{ px: 3, py: 1 }}>
-        <Button variant="contained" color="primary" onClick={auth.signIn}>
-          Login
-        </Button>
-        <Button variant="contained" color="primary" onClick={auth.signOut}>
-          Logout
-        </Button>
-        {auth.signedIn && auth.user && (
-          <div>
-            signedIn as {auth.user.name} {auth.user.surname}
-          </div>
-        )}
+      <Page innerSx={{ pl: 2, py: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
+          {auth.signedIn ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                auth.signOut();
+                setImages(null);
+              }}
+            >
+              Выйти
+            </Button>
+          ) : (
+            <Button variant="contained" color="primary" onClick={auth.signIn}>
+              Войти
+            </Button>
+          )}
+
+          {auth.signedIn && auth.user && (
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+              Вы вошли как {auth.user.name} {auth.user.surname}
+              <Avatar
+                alt={auth.user.name + " " + auth.user.surname}
+                src={auth.user.photo}
+                sx={{ height: 36, width: 36 }}
+              />
+            </Box>
+          )}
+        </Box>
+
         {images && <ImageMasonry itemData={images} />}
         <Button variant="contained" color="primary" onClick={handleClick}>
-          Test API
+          Загрузить
         </Button>
       </Page>
     </div>
