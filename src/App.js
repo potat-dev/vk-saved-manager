@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Page from "./components/Page";
 import { Button, Box, Avatar } from "@mui/material";
 import ImageMasonry from "./components/ImageMasonry";
 
 import useAuth from "./components/useAuth";
+import useOnScreen from "./components/useOnScreen";
 
 function App() {
   const app_id = "51400649";
   const auth = useAuth({ apiId: app_id, settings: 4 });
+
+  const btnRef = useRef(null);
+  const isOnScreen = useOnScreen(btnRef);
+
+  useEffect(() => {
+    if (isOnScreen) {
+      handleClick();
+    }
+  } , [isOnScreen]);
 
   const [images, setImages] = useState(null);
   const add_offset = () => {
@@ -91,7 +101,7 @@ function App() {
         </Box>
 
         {images && <ImageMasonry itemData={images} />}
-        <Button variant="contained" color="primary" onClick={handleClick}>
+        <Button ref={btnRef} variant="contained" color="primary" onClick={handleClick}>
           Загрузить
         </Button>
       </Page>

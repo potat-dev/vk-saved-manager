@@ -25,7 +25,9 @@ export default function ImageMasonry(props) {
       <Masonry columns={{ xs: 2, md: 3, lg: 4 }} spacing={2} sx={{ pr: 0 }}>
         {props.itemData.map((item, index) => (
           <div key={index}>
-            <LazyImage image={item} />
+            <a href={item.orig} target="_blank">
+              <LazyImage image={item} />
+            </a>
             <Label>
               <FavoriteBorderRoundedIcon fontSize="small" /> {item.likes}
               <ChatBubbleOutlineRoundedIcon fontSize="small" /> {item.comments}
