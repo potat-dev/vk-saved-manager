@@ -31,7 +31,6 @@ export default function useAuth({ apiId, settings }) {
   };
 
   useEffect(() => {
-    console.log(user);
     VK.init({ apiId });
     VK.Auth.getLoginStatus((response) => {
       if (response.session) {
