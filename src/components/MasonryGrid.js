@@ -13,12 +13,11 @@ export default function MasonryGrid(props) {
     <Box>
       <ImageList
         sx={{
-          height: 400,
+          height: 500,
           transform: "translateZ(0)",
         }}
         cols={3}
         gap={8}
-        rowHeight={200}
       >
         {props.itemData.map((item) => (
           <ImageListItem key={item.img}>
@@ -28,16 +27,24 @@ export default function MasonryGrid(props) {
                 src={item.src}
                 alt={item.src}
                 loading="lazy"
-                style={{ width: "100%", height: 150, objectFit: "cover"  }}
+                style={{ width: "100%", height: 150, objectFit: "cover" }}
               />
             </a>
             <ImageListItemBar
               position="below"
               title={
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <FavoriteBorderRoundedIcon fontSize="small" /> {item.likes}
-                  <ChatBubbleOutlineRoundedIcon fontSize="small" />{" "}
-                  {item.comments}
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <FavoriteBorderRoundedIcon fontSize="small" />
+                  {item.likes + " "}
+                  <ChatBubbleOutlineRoundedIcon fontSize="small" />
+                  {" " + item.comments}
                 </Box>
               }
             />
@@ -47,23 +54,3 @@ export default function MasonryGrid(props) {
     </Box>
   );
 }
-
-// export default function TitlebarBelowMasonryImageList() {
-//   return (
-//     <Box sx={{ width: 500, height: 450, overflowY: 'scroll' }}>
-//       <ImageList variant="masonry" cols={3} gap={8}>
-//         {itemData.map((item) => (
-//           <ImageListItem key={item.img}>
-//             <img
-//               src={`${item.img}?w=248&fit=crop&auto=format`}
-//               srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-//               alt={item.title}
-//               loading="lazy"
-//             />
-//             <ImageListItemBar position="below" title={item.author} />
-//           </ImageListItem>
-//         ))}
-//       </ImageList>
-//     </Box>
-//   );
-// }

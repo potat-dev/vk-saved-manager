@@ -22,6 +22,7 @@ export default function Page(props) {
       <Navbar
         onMenuClick={toggleDrawer}
         navItems={navItems}
+        auth={props.auth}
         title="Saved Manager"
       />
 

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Page from "./components/Page";
-import { Button, Box, Avatar } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import MasonryGrid from "./components/MasonryGrid";
 import Progress from "./components/Progress";
 
@@ -19,7 +19,13 @@ function App() {
   const [images, setImages] = useState(null);
   const [imagesLoaded, setImagesLoaded] = useState(0);
   const [imagesTotal, setImagesTotal] = useState(0);
-  const loadingValue = Math.round((imagesLoaded / imagesTotal) * 100);
+  // let loadingValue = Math.round((imagesLoaded / imagesTotal) * 100);
+  const [loadingValue, setLoadingValue] = useState(0);
+  const sliderRef = useRef(null);
+
+  useEffect(() => {
+    setLoadingValue(Math.round((imagesLoaded / imagesTotal) * 100));
+  }, [imagesLoaded, imagesTotal]);
 
   // turn the function into a promise
   // * WORKS * //
@@ -84,7 +90,8 @@ function App() {
 
     // wait for all promises to resolve
     const results = await Promise.all(promises);
-    console.log(results);
+    // console.log(results);
+    setLoadingValue(100);
 
     // flatten the array
     const images = results.flat();
@@ -94,46 +101,15 @@ function App() {
 
   return (
     <div>
-      <Page innerSx={{ px: 2, py: 2 }}>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
-          {auth.signedIn ? (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                auth.signOut();
-                setImages(null);
-              }}
-            >
-              Выйти
-            </Button>
-          ) : (
-            <Button variant="contained" color="primary" onClick={auth.signIn}>
-              Войти
-            </Button>
-          )}
-
-          {auth.signedIn && auth.user && (
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-              Вы вошли как {auth.user.name} {auth.user.surname}
-              <Avatar
-                alt={auth.user.name + " " + auth.user.surname}
-                src={auth.user.photo}
-                sx={{ height: 36, width: 36 }}
-              />
-            </Box>
-          )}
-        </Box>
-
+      <Page innerSx={{ px: 2, py: 2 }} auth={auth}>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
           <Button variant="contained" color="primary" onClick={fetchImages}>
             Загрузить
           </Button>
+          <Progress value={loadingValue} />
         </Box>
 
         {images && "Всего фотографий: " + images.length}
-        <Progress value={loadingValue} />
-
         {images && <MasonryGrid itemData={images} />}
       </Page>
     </div>
