@@ -8,8 +8,8 @@ export default function useVK({ apiId, settings }) {
   const [User, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   useEffect(() => {
-    VK.init({ apiId: apiId });
-    VK.Auth.getLoginStatus(async (response) => {
+    VK.init({ apiId });
+    VK.Auth.getLoginStatus((response) => {
       if (response.session) {
         setSignedIn(true);
         if (!User) getUserInfo(response.session.mid);
@@ -36,8 +36,8 @@ export default function useVK({ apiId, settings }) {
       v: "5.131",
     });
 
-    if (userData.response) {
-      let user = userData.response[0];
+    if (userData) {
+      let user = userData[0];
       user = {
         id: user.id,
         domain: user.domain,
@@ -70,7 +70,7 @@ export default function useVK({ apiId, settings }) {
   return {
     VK,
     User,
-    SignedIn: signedIn,
+    signedIn,
     Login,
     Logout,
     Api,
