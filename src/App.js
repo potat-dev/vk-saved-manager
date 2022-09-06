@@ -6,10 +6,12 @@ import Progress from "./components/Progress";
 
 import { RateLimiter } from "limiter";
 import useAuth from "./components/useAuth";
+import useVK from "./components/useVK";
 
 function App() {
   const app_id = "51400649";
-  const auth = useAuth({ apiId: app_id, settings: 4 });
+  const VK = useVK({ apiId: app_id, settings: 4 });
+  // const auth = useAuth({ apiId: app_id, settings: 4 });
   const limiter = new RateLimiter({
     tokensPerInterval: 1,
     interval: 400,
@@ -27,24 +29,10 @@ function App() {
     setLoadingValue(Math.round((imagesLoaded / imagesTotal) * 100));
   }, [imagesLoaded, imagesTotal]);
 
-  // turn the function into a promise
-  // * WORKS * //
-  const apiCall = (method, payload) => {
-    return new Promise((resolve, reject) => {
-      window.VK.Api.call(method, { ...payload, v: "5.131" }, (data) => {
-        if (data.response) {
-          resolve(data.response);
-        } else {
-          reject(data);
-        }
-      });
-    });
-  };
-
   const fetchImages = async () => {
     // ограничить повторное нажатие кнопки
-    const data = await apiCall("photos.get", {
-      owner_id: auth.user.id,
+    const data = await VK.Api("photos.get", {
+      owner_id: VK.User.id,
       album_id: "saved",
       count: 0,
     });
@@ -59,8 +47,8 @@ function App() {
     const promises = pages.map(async (page) => {
       await limiter.removeTokens(1);
 
-      const responce = await apiCall("photos.get", {
-        owner_id: auth.user.id,
+      const responce = await VK.Api("photos.get", {
+        owner_id: VK.User.id,
         album_id: "saved",
         count: 100,
         offset: page * 100,
@@ -101,7 +89,7 @@ function App() {
 
   return (
     <div>
-      <Page innerSx={{ px: 2, py: 2 }} auth={auth}>
+      <Page innerSx={{ px: 2, py: 2 }} vk={VK}>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
           <Button variant="contained" color="primary" onClick={fetchImages}>
             Загрузить

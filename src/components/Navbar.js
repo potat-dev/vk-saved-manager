@@ -21,7 +21,7 @@ import Login from "@mui/icons-material/Login";
 
 export default function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const auth = props.auth;
+  const VK = props.vk;
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -56,13 +56,13 @@ export default function Navbar(props) {
         <Box sx={{ flexGrow: 0, ml: 2 }}>
           <Tooltip title="Аккаунт">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {auth.signedIn && auth.user && (
+              {VK.signedIn && VK.User && (
                 <Avatar
-                  alt={auth.user.name + " " + auth.user.surname}
-                  src={auth.user.photo}
+                  alt={VK.User.name + " " + VK.User.surname}
+                  src={VK.User.photo}
                 />
               )}
-              {!auth.signedIn && <Avatar />}
+              {!VK.signedIn && <Avatar />}
             </IconButton>
           </Tooltip>
           <Menu
@@ -89,11 +89,11 @@ export default function Navbar(props) {
                   sx={{ color: "GrayText" }}
                   // gutterBottom={auth.signedIn}
                 >
-                  {auth.signedIn ? "Вы вошли как" : "Вы не вошли в аккаунт"}
+                  {VK.signedIn ? "Вы вошли как" : "Вы не вошли в аккаунт"}
                 </Typography>
-                {auth.signedIn && auth.user && (
+                {VK.signedIn && VK.User && (
                   <Typography variant="h6">
-                    {auth.user.name + " " + auth.user.surname}
+                    {VK.User.name + " " + VK.User.surname}
                   </Typography>
                 )}
               </Box>
@@ -105,15 +105,15 @@ export default function Navbar(props) {
               </ListItemIcon>
               Settings
             </MenuItem>
-            {auth.signedIn ? (
-              <MenuItem onClick={auth.signOut}>
+            {VK.signedIn ? (
+              <MenuItem onClick={VK.Logout}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
                 Logout
               </MenuItem>
             ) : (
-              <MenuItem onClick={auth.signIn}>
+              <MenuItem onClick={VK.Login}>
                 <ListItemIcon>
                   <Login fontSize="small" />
                 </ListItemIcon>
