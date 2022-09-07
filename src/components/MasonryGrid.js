@@ -8,8 +8,42 @@ import LazyImage from "./LazyImage";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
-export default function MasonryGrid(props) {
-  // wait 5 seconds before loading images
+function MasonryGrid(props) {
+  console.log("MasonryGrid rendered");
+  // useMemo to prevent rerendering
+  const items = React.useMemo(() => {
+    return props.items.map((item) => (
+      <ImageListItem key={item.img}>
+        <a href={item.orig} target="_blank">
+          {/* <LazyImage image={item} /> */}
+          <img
+            src={item.src}
+            alt={item.src}
+            loading="lazy"
+            style={{ width: "100%", height: 150, objectFit: "cover" }}
+          />
+        </a>
+        <ImageListItemBar
+          position="below"
+          title={
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                alignContent: "center",
+              }}
+            >
+              <FavoriteBorderRoundedIcon fontSize="small" />
+              {item.likes + " "}
+              <ChatBubbleOutlineRoundedIcon fontSize="small" />
+              {" " + item.comments}
+            </Box>
+          }
+        />
+      </ImageListItem>
+    ));
+  }, [props.items]);
 
   return (
     <Box>
@@ -21,38 +55,10 @@ export default function MasonryGrid(props) {
         cols={3}
         gap={8}
       >
-        {props.itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <a href={item.orig} target="_blank">
-              {/* <LazyImage image={item} /> */}
-              <img
-                src={item.src}
-                alt={item.src}
-                loading="lazy"
-                style={{ width: "100%", height: 150, objectFit: "cover" }}
-              />
-            </a>
-            <ImageListItemBar
-              position="below"
-              title={
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                    alignItems: "center",
-                    alignContent: "center",
-                  }}
-                >
-                  <FavoriteBorderRoundedIcon fontSize="small" />
-                  {item.likes + " "}
-                  <ChatBubbleOutlineRoundedIcon fontSize="small" />
-                  {" " + item.comments}
-                </Box>
-              }
-            />
-          </ImageListItem>
-        ))}
+        {items}
       </ImageList>
     </Box>
   );
 }
+
+export default MasonryGrid = React.memo(MasonryGrid);

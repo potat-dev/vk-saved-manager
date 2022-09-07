@@ -20,15 +20,18 @@ import Logout from "@mui/icons-material/Logout";
 import Login from "@mui/icons-material/Login";
 
 export default function Navbar(props) {
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  console.log("Navbar render");
   const VK = props.vk;
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    event.preventDefault();
+    console.log("handleClick");
+    setAnchorEl(event.currentTarget);
+    // console.log("handleClick", event.currentTarget);
   };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -55,7 +58,7 @@ export default function Navbar(props) {
         </Box>
         <Box sx={{ flexGrow: 0, ml: 2 }}>
           <Tooltip title="Аккаунт">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <div onClick={handleClick}>
               {VK.signedIn && VK.User && (
                 <Avatar
                   alt={VK.User.name + " " + VK.User.surname}
@@ -63,13 +66,15 @@ export default function Navbar(props) {
                 />
               )}
               {!VK.signedIn && <Avatar />}
-            </IconButton>
+            </div>
           </Tooltip>
           <Menu
-            anchorEl={anchorElUser}
+            anchorEl={anchorEl}
+            disableAutoFocusItem
             id="account-menu"
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
+            open={open}
+            onClose={handleClose}
+            // onClick={handleClose}
             PaperProps={{
               elevation: 0,
               variant: "outlined",
@@ -81,8 +86,9 @@ export default function Navbar(props) {
             }}
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            // transitionDuration={0}
           >
-            <MenuItem>
+            <MenuItem disableTouchRipple disableRipple>
               <Box>
                 <Typography
                   variant="subtitle2"

@@ -116,7 +116,7 @@ function App() {
         {images && "Всего фотографий: " + images.length}
         {images && (
           <React.Suspense fallback={<p>Loading page...</p>}>
-            <MasonryGrid itemData={images} />
+            <MasonryGrid items={images} />
           </React.Suspense>
         )}
         {/* as in this article */}
