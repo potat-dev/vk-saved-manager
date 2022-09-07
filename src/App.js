@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import Page from "./components/Page";
 import { Button, Box } from "@mui/material";
-import MasonryGrid from "./components/MasonryGrid";
+// import MasonryGrid from "./components/MasonryGrid";
 import Progress from "./components/Progress";
 
 import { RateLimiter } from "limiter";
 import useAuth from "./components/useAuth";
 import useVK from "./components/useVK";
+
+const MasonryGrid = React.lazy(() => import("./components/MasonryGrid"));
 
 function App() {
   const app_id = "51400649";
@@ -19,15 +21,19 @@ function App() {
 
   const targetSize = "m";
   const [images, setImages] = useState(null);
-  const [imagesLoaded, setImagesLoaded] = useState(0);
-  const [imagesTotal, setImagesTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   // let loadingValue = Math.round((imagesLoaded / imagesTotal) * 100);
   const [loadingValue, setLoadingValue] = useState(0);
-  const sliderRef = useRef(null);
 
-  useEffect(() => {
-    setLoadingValue(Math.round((imagesLoaded / imagesTotal) * 100));
-  }, [imagesLoaded, imagesTotal]);
+  // if images loaded display images only after 5 seconds
+  const [displayImages, setDisplayImages] = useState(false);
+
+  if (!isLoading && images) {
+    setTimeout(() => {
+      setDisplayImages(true);
+    }, 5000);
+  }
 
   const fetchImages = async () => {
     // ограничить повторное нажатие кнопки
@@ -39,9 +45,10 @@ function App() {
     console.log(data.count);
 
     const api_calls = Math.ceil(data.count / 100);
-    setImagesTotal(api_calls);
+    const imagesTotal = api_calls;
     const pages = Array.from(Array(api_calls).keys());
     console.log(pages);
+    var imagesLoaded = 0;
 
     // create an array of promises
     const promises = pages.map(async (page) => {
@@ -72,18 +79,27 @@ function App() {
       });
 
       // increment the count
-      setImagesLoaded((count) => count + 1);
+      imagesLoaded++;
+      console.log(page, "loaded");
+      // force update slider value
+      setLoadingValue(Math.round((imagesLoaded / imagesTotal) * 100));
+      console.log(
+        (imagesLoaded / imagesTotal) * 100,
+        "percent",
+        imagesLoaded,
+        imagesTotal
+      );
       return images;
     });
 
     // wait for all promises to resolve
     const results = await Promise.all(promises);
-    // console.log(results);
-    setLoadingValue(100);
 
     // flatten the array
+    // console.log("before flat");
     const images = results.flat();
     console.log(images);
+    // console.log("after flat");
     setImages(images);
   };
 
@@ -98,7 +114,14 @@ function App() {
         </Box>
 
         {images && "Всего фотографий: " + images.length}
-        {images && <MasonryGrid itemData={images} />}
+        {images && (
+          <React.Suspense fallback={<p>Loading page...</p>}>
+            <MasonryGrid itemData={images} />
+          </React.Suspense>
+        )}
+        {/* as in this article */}
+        {/* https://blog.logrocket.com/optimizing-performance-react-application/ */}
+        {/* https://codesandbox.io/s/silly-ives-c03ln?file=/src/App.js */}
       </Page>
     </div>
   );
