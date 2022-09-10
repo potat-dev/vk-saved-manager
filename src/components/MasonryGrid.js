@@ -46,18 +46,15 @@ function MasonryGrid(props) {
   }, [props.items]);
 
   return (
-    <Box>
-      <ImageList
-        sx={{
-          height: 500,
-          transform: "translateZ(0)",
-        }}
-        cols={3}
-        gap={8}
-      >
-        {items}
-      </ImageList>
-    </Box>
+    <ImageList
+      sx={{
+        transform: "translateZ(0)",
+      }}
+      cols={3}
+      gap={8}
+    >
+      {items}
+    </ImageList>
   );
 }
 

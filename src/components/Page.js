@@ -32,6 +32,8 @@ export default function Page(props) {
         drawerWidth={drawerWidth}
         navItems={navItems}
         container={container}
+        title="Saved Manager"
+        vk={props.vk}
       />
 
       <Container
